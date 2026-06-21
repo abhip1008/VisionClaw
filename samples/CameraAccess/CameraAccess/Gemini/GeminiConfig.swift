@@ -32,6 +32,7 @@ enum GeminiConfig {
     - set_checkin_timer / cancel_checkin: safety check-in timers ("going for a walk, check in at 7pm" / "I'm back").
     - end_of_day: when the user is wrapping up for the day.
     - get_weather: current weather + today's high/low for the user's location (jacket/umbrella questions).
+    - read_text: read, summarize, or translate text the user is looking at (letter, label, menu, sign, screen). Use when they say "read this", "what does this say", or "translate this". Pass target_language only for a translation.
 
     For ANYTHING else (web search, shopping lists, research, smart-home, other apps), use execute with a detailed task description that includes all relevant context: names, content, platforms, quantities, etc.
 

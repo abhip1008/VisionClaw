@@ -112,6 +112,7 @@ enum ToolDeclarations {
     cancelCheckin,
     endOfDay,
     getWeather,
+    readText,
   ]
 
   // MARK: Feature B — Voice Email Triage & Reply
@@ -301,6 +302,20 @@ enum ToolDeclarations {
     "parameters": [
       "type": "object",
       "properties": [String: Any](),
+      "required": [String]()
+    ] as [String: Any]
+  ]
+
+  // MARK: Feature M — Read & Translate (Vision OCR)
+
+  static let readText: [String: Any] = [
+    "name": "read_text",
+    "description": "Reads, summarizes, or translates text the user is looking at (a letter, label, menu, sign, or screen) using on-device OCR of the camera view. Call when the user says 'read this', 'what does this say', or 'translate this'.",
+    "parameters": [
+      "type": "object",
+      "properties": [
+        "target_language": ["type": "string", "description": "Optional: the language to translate the text into (e.g. 'Spanish'). Omit to just read it aloud."]
+      ],
       "required": [String]()
     ] as [String: Any]
   ]

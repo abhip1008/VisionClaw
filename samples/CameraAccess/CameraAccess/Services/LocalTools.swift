@@ -28,6 +28,7 @@ enum LocalTools {
     "cancel_checkin",
     "end_of_day",
     "get_weather",
+    "read_text",
   ]
 
   static func isLocal(_ name: String) -> Bool { names.contains(name) }
@@ -199,6 +200,20 @@ enum LocalTools {
     // MARK: Feature L — Weather
     case "get_weather":
       return .success(await WeatherService.currentSummary())
+
+    // MARK: Feature M — Read & Translate (Vision OCR)
+    case "read_text":
+      guard let image = LatestFrameStore.shared.image else {
+        return .success("I can't see anything right now — make sure the camera view is active.")
+      }
+      let text = await TextRecognitionService.recognizeText(in: image)
+      if text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+        return .success("I don't see any clear text. Try holding steadier and a bit closer.")
+      }
+      if let lang = args["target_language"] as? String, !lang.isEmpty {
+        return .success("Here is the text I can see:\n\(text)\n\nTranslate it into \(lang) and read the translation aloud, clearly and slowly.")
+      }
+      return .success("Here is the text I can see:\n\(text)\n\nRead it back to the user clearly and slowly. If it's long, summarize the key points instead of reading every word.")
 
     default:
       return .failure("Unknown local tool: \(call.name)")
