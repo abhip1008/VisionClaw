@@ -174,6 +174,34 @@ class GeminiSessionViewModel: ObservableObject {
       }
       eventClient.connect()
     }
+
+    // Feature A — Morning Briefing: once connected, proactively read today's
+    // schedule and urgent email. Only fires if the user connected Google.
+    if GoogleAuth.isSignedIn {
+      Task { @MainActor [weak self] in
+        try? await Task.sleep(nanoseconds: 2_000_000_000)
+        guard let self, self.isGeminiActive, self.connectionState == .ready else { return }
+
+        async let calendarSummary = GoogleCalendarService.fetchTodayEvents()
+        async let emailSummary = GmailService.fetchUrgentEmails()
+        let calendar = await calendarSummary
+        let emails = await emailSummary
+
+        guard self.isGeminiActive, self.connectionState == .ready else { return }
+
+        let briefing = """
+        Give a brief morning briefing. Keep it under 60 seconds when spoken. \
+        Be warm and conversational, not robotic.
+
+        \(calendar)
+
+        \(emails)
+
+        End by asking if there's anything specific to focus on today.
+        """
+        self.geminiService.sendTextMessage(briefing)
+      }
+    }
   }
 
   func stopSession() {

@@ -31,6 +31,10 @@ struct SettingsView: View {
           }
         }
 
+        Section(header: Text("Google Account"), footer: Text("Connect Google to enable the morning briefing, email triage, meeting prep, and calendar reminders.")) {
+          GoogleConnectView()
+        }
+
         Section(header: Text("System Prompt"), footer: Text("Customize the AI assistant's behavior and personality. Changes take effect on the next Gemini session.")) {
           TextEditor(text: $geminiSystemPrompt)
             .font(.system(.body, design: .monospaced))

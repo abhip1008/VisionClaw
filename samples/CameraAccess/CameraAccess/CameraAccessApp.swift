@@ -69,6 +69,9 @@ struct CameraAccessApp: App {
 
       // Registration view handles the flow for connecting to the glasses via Meta AI
       RegistrationView(viewModel: wearablesViewModel)
+        // Restore a previous Google sign-in and route OAuth callbacks (Dad-build features)
+        .onAppear { GoogleAuth.restorePreviousSignIn() }
+        .onOpenURL { url in GoogleAuth.handle(url) }
     }
   }
 }
