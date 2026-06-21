@@ -6,6 +6,7 @@
 // Handlers are added here as each Dad-build feature is implemented.
 
 import Foundation
+import UIKit
 
 @MainActor
 enum LocalTools {
@@ -22,6 +23,7 @@ enum LocalTools {
     "remember_this",
     "create_calendar_event",
     "get_daily_summary",
+    "set_focus_mode",
   ]
 
   static func isLocal(_ name: String) -> Bool { names.contains(name) }
@@ -127,6 +129,16 @@ enum LocalTools {
 
       Read this back naturally and conversationally. Ask if anything needs to be moved, updated, or added.
       """)
+
+    // MARK: Feature I — Focus Mode Trigger
+    case "set_focus_mode":
+      let enabled = args["enabled"] as? Bool ?? true
+      let shortcutName = enabled ? "FocusOn" : "FocusOff"
+      let encoded = shortcutName.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? shortcutName
+      if let url = URL(string: "shortcuts://run-shortcut?name=\(encoded)") {
+        UIApplication.shared.open(url)
+      }
+      return .success("Focus mode turned \(enabled ? "on" : "off").")
 
     default:
       return .failure("Unknown local tool: \(call.name)")

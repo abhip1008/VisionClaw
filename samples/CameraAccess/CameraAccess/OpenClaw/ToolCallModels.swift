@@ -100,6 +100,7 @@ enum ToolDeclarations {
     rememberThis,
     createCalendarEvent,
     getDailySummary,
+    setFocusMode,
   ]
 
   // MARK: Feature B — Voice Email Triage & Reply
@@ -223,6 +224,20 @@ enum ToolDeclarations {
       "type": "object",
       "properties": [String: Any](),
       "required": [String]()
+    ] as [String: Any]
+  ]
+
+  // MARK: Feature I — Focus Mode Trigger
+
+  static let setFocusMode: [String: Any] = [
+    "name": "set_focus_mode",
+    "description": "Turns iPhone Focus mode (Do Not Disturb) on or off via an iOS Shortcut. Use when the user says they are in a meeting, need quiet, or are done with a meeting.",
+    "parameters": [
+      "type": "object",
+      "properties": [
+        "enabled": ["type": "boolean", "description": "true to enable Focus/DND, false to disable it"]
+      ],
+      "required": ["enabled"]
     ] as [String: Any]
   ]
 
