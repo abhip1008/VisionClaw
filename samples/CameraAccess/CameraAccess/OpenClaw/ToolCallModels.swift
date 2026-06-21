@@ -99,6 +99,7 @@ enum ToolDeclarations {
     saveParkingSpot,
     rememberThis,
     createCalendarEvent,
+    getDailySummary,
   ]
 
   // MARK: Feature B — Voice Email Triage & Reply
@@ -210,6 +211,18 @@ enum ToolDeclarations {
         "notes": ["type": "string", "description": "Optional notes or description for the event"]
       ],
       "required": ["title", "start_time", "end_time"]
+    ] as [String: Any]
+  ]
+
+  // MARK: Feature H — Daily Commitment Readback
+
+  static let getDailySummary: [String: Any] = [
+    "name": "get_daily_summary",
+    "description": "Returns all of today's commitments: calendar events and captured notes. Call when the user asks what they need to do, what's on their plate, or what they committed to today.",
+    "parameters": [
+      "type": "object",
+      "properties": [String: Any](),
+      "required": [String]()
     ] as [String: Any]
   ]
 

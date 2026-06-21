@@ -21,6 +21,7 @@ enum LocalTools {
     "save_parking_spot",
     "remember_this",
     "create_calendar_event",
+    "get_daily_summary",
   ]
 
   static func isLocal(_ name: String) -> Bool { names.contains(name) }
@@ -109,6 +110,23 @@ enum LocalTools {
         title: title, startTime: startTime, endTime: endTime, notes: notes
       )
       return ok ? .success("Added '\(title)' to your calendar.") : .failure("Could not create the event.")
+
+    // MARK: Feature H — Daily Commitment Readback
+    case "get_daily_summary":
+      async let calendarSummary = GoogleCalendarService.fetchTodayEvents()
+      let notes = NoteService.getTodaysNotes()
+      let calendar = await calendarSummary
+      return .success("""
+      Here is everything for today:
+
+      SCHEDULE:
+      \(calendar)
+
+      NOTES CAPTURED TODAY:
+      \(notes)
+
+      Read this back naturally and conversationally. Ask if anything needs to be moved, updated, or added.
+      """)
 
     default:
       return .failure("Unknown local tool: \(call.name)")
