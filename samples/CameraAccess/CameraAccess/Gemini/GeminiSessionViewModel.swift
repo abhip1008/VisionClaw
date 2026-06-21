@@ -16,6 +16,7 @@ class GeminiSessionViewModel: ObservableObject {
   private var toolCallRouter: ToolCallRouter?
   private let audioManager = AudioManager()
   private let eventClient = OpenClawEventClient()
+  private let meetingPrepService = MeetingPrepService()  // Feature C
   private var lastVideoFrameTime: Date = .distantPast
   private var stateObservation: Task<Void, Never>?
 
@@ -175,6 +176,14 @@ class GeminiSessionViewModel: ObservableObject {
       eventClient.connect()
     }
 
+    // Feature C — Pre-Meeting Prep: speak a prep summary ~5 min before meetings.
+    if GoogleAuth.isSignedIn {
+      meetingPrepService.startMonitoring { [weak self] prepPrompt in
+        guard let self, self.isGeminiActive, self.connectionState == .ready else { return }
+        self.geminiService.sendTextMessage(prepPrompt)
+      }
+    }
+
     // Feature A — Morning Briefing: once connected, proactively read today's
     // schedule and urgent email. Only fires if the user connected Google.
     if GoogleAuth.isSignedIn {
@@ -205,6 +214,7 @@ class GeminiSessionViewModel: ObservableObject {
   }
 
   func stopSession() {
+    meetingPrepService.stopMonitoring()  // Feature C
     eventClient.disconnect()
     toolCallRouter?.cancelAll()
     toolCallRouter = nil
