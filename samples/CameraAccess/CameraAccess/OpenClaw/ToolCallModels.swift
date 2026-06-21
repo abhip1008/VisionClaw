@@ -85,7 +85,14 @@ enum ToolCallStatus: Equatable {
 enum ToolDeclarations {
 
   static func allDeclarations() -> [[String: Any]] {
-    return [execute] + dadBuildTools
+    // Dedicated tools are BLOCKING so the model waits for the on-device result
+    // before speaking the confirmation (matching the execute tool's behavior).
+    let blockingTools = dadBuildTools.map { tool -> [String: Any] in
+      var t = tool
+      t["behavior"] = "BLOCKING"
+      return t
+    }
+    return [execute] + blockingTools
   }
 
   // Dedicated on-device tools added by the Dad-build guide (Features A–K).
