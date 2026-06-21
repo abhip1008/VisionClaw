@@ -55,6 +55,7 @@
 		<string>audio</string>
 		<string>bluetooth-peripheral</string>
 		<string>external-accessory</string>
+		<string>location</string>
 	</array>
 	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>Needed to connect to Meta AI Glasses</string>
@@ -71,6 +72,10 @@
 	<string>This app uses the microphone to have voice conversations with the AI assistant while streaming from your glasses.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>This app needs access to save photos captured from your glasses.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>This app uses your location to send ETA texts to family and log where you parked.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>This app monitors your location to send automatic messages when you leave a place and to handle safety check-ins.</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsLocalNetworking</key>

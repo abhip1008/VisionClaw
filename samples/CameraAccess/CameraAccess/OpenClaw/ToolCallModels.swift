@@ -93,6 +93,9 @@ enum ToolDeclarations {
   static let dadBuildTools: [[String: Any]] = [
     readEmails,
     sendEmail,
+    sendETAText,
+    sendIMessage,
+    setLocationTrigger,
   ]
 
   // MARK: Feature B — Voice Email Triage & Reply
@@ -118,6 +121,47 @@ enum ToolDeclarations {
         "body": ["type": "string", "description": "The full email body text"]
       ],
       "required": ["to", "subject", "body"]
+    ] as [String: Any]
+  ]
+
+  // MARK: Feature D — Auto Messages & ETA Texts
+
+  static let sendETAText: [String: Any] = [
+    "name": "send_eta_text",
+    "description": "Calculates driving ETA to a destination and texts it to a contact. Use when the user says they are heading somewhere.",
+    "parameters": [
+      "type": "object",
+      "properties": [
+        "contact": ["type": "string", "description": "Name of the person to text (e.g. 'wife', 'mom')"],
+        "destination": ["type": "string", "description": "Where the user is heading (e.g. 'home', '123 Main St')"]
+      ],
+      "required": ["contact", "destination"]
+    ] as [String: Any]
+  ]
+
+  static let sendIMessage: [String: Any] = [
+    "name": "send_imessage",
+    "description": "Sends an iMessage to a contact. Use when the user wants to notify someone of something.",
+    "parameters": [
+      "type": "object",
+      "properties": [
+        "contact": ["type": "string", "description": "Name of the contact to message"],
+        "message": ["type": "string", "description": "The message to send"]
+      ],
+      "required": ["contact", "message"]
+    ] as [String: Any]
+  ]
+
+  static let setLocationTrigger: [String: Any] = [
+    "name": "set_location_trigger",
+    "description": "Sets up a message to be sent automatically when the user leaves their current location.",
+    "parameters": [
+      "type": "object",
+      "properties": [
+        "contact": ["type": "string", "description": "Name of the contact to message when leaving"],
+        "message": ["type": "string", "description": "The message to send when the user leaves"]
+      ],
+      "required": ["contact", "message"]
     ] as [String: Any]
   ]
 

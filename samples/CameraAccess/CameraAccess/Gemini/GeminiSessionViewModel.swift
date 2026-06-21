@@ -176,6 +176,16 @@ class GeminiSessionViewModel: ObservableObject {
       eventClient.connect()
     }
 
+    // Feature D — geofence exits: text the contact via the OpenClaw agent.
+    LocationService.shared.onGeofenceExit = { [weak self] contact, message in
+      Task { @MainActor in
+        _ = await self?.openClawBridge.delegateTask(
+          task: "Send iMessage to \(contact) saying: \(message)",
+          toolName: "execute"
+        )
+      }
+    }
+
     // Feature C — Pre-Meeting Prep: speak a prep summary ~5 min before meetings.
     if GoogleAuth.isSignedIn {
       meetingPrepService.startMonitoring { [weak self] prepPrompt in
