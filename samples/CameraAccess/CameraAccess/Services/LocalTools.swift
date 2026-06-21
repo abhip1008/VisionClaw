@@ -27,6 +27,7 @@ enum LocalTools {
     "set_checkin_timer",
     "cancel_checkin",
     "end_of_day",
+    "get_weather",
   ]
 
   static func isLocal(_ name: String) -> Bool { names.contains(name) }
@@ -194,6 +195,10 @@ enum LocalTools {
 
       Have a good evening.
       """)
+
+    // MARK: Feature L — Weather
+    case "get_weather":
+      return .success(await WeatherService.currentSummary())
 
     default:
       return .failure("Unknown local tool: \(call.name)")

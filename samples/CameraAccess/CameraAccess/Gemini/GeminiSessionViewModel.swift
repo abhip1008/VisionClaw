@@ -208,14 +208,18 @@ class GeminiSessionViewModel: ObservableObject {
 
         async let calendarSummary = GoogleCalendarService.fetchTodayEvents()
         async let emailSummary = GmailService.fetchUrgentEmails()
+        async let weatherSummary = WeatherService.currentSummary()  // Feature L
         let calendar = await calendarSummary
         let emails = await emailSummary
+        let weather = await weatherSummary
 
         guard self.isGeminiActive, self.connectionState == .ready else { return }
 
         let briefing = """
         Give a brief morning briefing. Keep it under 60 seconds when spoken. \
         Be warm and conversational, not robotic.
+
+        Weather: \(weather)
 
         \(calendar)
 

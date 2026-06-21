@@ -43,6 +43,7 @@ in `Services/LocalTools.swift`) the assistant calls by voice. Setup steps are in
 | **I — Focus Mode** | "I'm in a meeting" / "I'm done" | Toggles Do Not Disturb via iOS Shortcuts (`set_focus_mode`) |
 | **J — Check-In Timer** | "Going for a walk, check in at 7pm" / "I'm back" | Texts family your location if you don't cancel by the due time (`set_checkin_timer`, `cancel_checkin`) |
 | **K — End-of-Day Wrap** | "I'm done for the day, text my wife" | Texts family, clears Focus, reads a day summary (`end_of_day`) |
+| **L — Weather** | "What's the weather?" / "Do I need a jacket?" | Current conditions + today's high/low via Open-Meteo; also part of the morning briefing (`get_weather`) |
 
 > Features A, C, G, H and the briefing require connecting Google under
 > **Settings ▸ Google Account**. The messaging features (D, E, J, K) route through

@@ -111,6 +111,7 @@ enum ToolDeclarations {
     setCheckinTimer,
     cancelCheckin,
     endOfDay,
+    getWeather,
   ]
 
   // MARK: Feature B — Voice Email Triage & Reply
@@ -289,6 +290,18 @@ enum ToolDeclarations {
         "message": ["type": "string", "description": "Optional custom message to family. Defaults to a simple 'work is done' note."]
       ],
       "required": ["family_contact"]
+    ] as [String: Any]
+  ]
+
+  // MARK: Feature L — Weather
+
+  static let getWeather: [String: Any] = [
+    "name": "get_weather",
+    "description": "Returns the current weather and today's high/low for the user's location. Call when the user asks about the weather, temperature, or whether they need a jacket/umbrella.",
+    "parameters": [
+      "type": "object",
+      "properties": [String: Any](),
+      "required": [String]()
     ] as [String: Any]
   ]
 
