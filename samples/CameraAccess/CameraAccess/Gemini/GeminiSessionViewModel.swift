@@ -241,6 +241,7 @@ class GeminiSessionViewModel: ObservableObject {
   }
 
   func sendVideoFrameIfThrottled(image: UIImage) {
+    LatestFrameStore.shared.image = image  // Feature E — cache latest frame for parking photo
     guard SettingsManager.shared.videoStreamingEnabled else { return }
     guard isGeminiActive, connectionState == .ready else { return }
     let now = Date()

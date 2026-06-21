@@ -18,6 +18,7 @@ enum LocalTools {
     "send_eta_text",
     "send_imessage",
     "set_location_trigger",
+    "save_parking_spot",
   ]
 
   static func isLocal(_ name: String) -> Bool { names.contains(name) }
@@ -67,6 +68,13 @@ enum LocalTools {
       else { return .failure("Missing parameters.") }
       LocationService.shared.setGeofenceAtCurrentLocation(contact: contact, message: message)
       return .success("Got it. I'll text \(contact) when you leave here.")
+
+    // MARK: Feature E — Parking Spot Logger
+    case "save_parking_spot":
+      let image = LatestFrameStore.shared.image
+      let result = await ParkingService.saveParkingSpot(image: image)
+      _ = await sendViaAgent("Send iMessage to myself saying: \(result)", bridge: bridge)
+      return .success(result)
 
     default:
       return .failure("Unknown local tool: \(call.name)")

@@ -96,6 +96,7 @@ enum ToolDeclarations {
     sendETAText,
     sendIMessage,
     setLocationTrigger,
+    saveParkingSpot,
   ]
 
   // MARK: Feature B — Voice Email Triage & Reply
@@ -162,6 +163,18 @@ enum ToolDeclarations {
         "message": ["type": "string", "description": "The message to send when the user leaves"]
       ],
       "required": ["contact", "message"]
+    ] as [String: Any]
+  ]
+
+  // MARK: Feature E — Parking Spot Logger
+
+  static let saveParkingSpot: [String: Any] = [
+    "name": "save_parking_spot",
+    "description": "Saves the current parking location with GPS coordinates and a photo. Call when the user says 'remember where I parked' or similar.",
+    "parameters": [
+      "type": "object",
+      "properties": [String: Any](),
+      "required": [String]()
     ] as [String: Any]
   ]
 
