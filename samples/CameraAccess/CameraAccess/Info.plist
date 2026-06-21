@@ -76,6 +76,8 @@
 	<string>This app uses your location to send ETA texts to family and log where you parked.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>This app monitors your location to send automatic messages when you leave a place and to handle safety check-ins.</string>
+	<key>NSRemindersFullAccessUsageDescription</key>
+	<string>This app creates reminders when you ask it to remember a task or follow up later.</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsLocalNetworking</key>

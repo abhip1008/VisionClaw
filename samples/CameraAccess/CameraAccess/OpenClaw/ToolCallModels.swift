@@ -97,6 +97,7 @@ enum ToolDeclarations {
     sendIMessage,
     setLocationTrigger,
     saveParkingSpot,
+    rememberThis,
   ]
 
   // MARK: Feature B — Voice Email Triage & Reply
@@ -175,6 +176,22 @@ enum ToolDeclarations {
       "type": "object",
       "properties": [String: Any](),
       "required": [String]()
+    ] as [String: Any]
+  ]
+
+  // MARK: Feature F — "Remember This" Task Capture
+
+  static let rememberThis: [String: Any] = [
+    "name": "remember_this",
+    "description": "Saves a note about what the user is currently looking at, optionally with a due date for follow-up.",
+    "parameters": [
+      "type": "object",
+      "properties": [
+        "title": ["type": "string", "description": "Short title for the note"],
+        "body": ["type": "string", "description": "Full description of what to remember"],
+        "due_date": ["type": "string", "description": "Optional: ISO 8601 date string if the user wants a reminder"]
+      ],
+      "required": ["title", "body"]
     ] as [String: Any]
   ]
 

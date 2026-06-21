@@ -19,6 +19,7 @@ enum LocalTools {
     "send_imessage",
     "set_location_trigger",
     "save_parking_spot",
+    "remember_this",
   ]
 
   static func isLocal(_ name: String) -> Bool { names.contains(name) }
@@ -75,6 +76,25 @@ enum LocalTools {
       let result = await ParkingService.saveParkingSpot(image: image)
       _ = await sendViaAgent("Send iMessage to myself saying: \(result)", bridge: bridge)
       return .success(result)
+
+    // MARK: Feature F — "Remember This" Task Capture
+    case "remember_this":
+      guard
+        let title = args["title"] as? String,
+        let body = args["body"] as? String
+      else { return .failure("Missing note content.") }
+
+      let dueDate = (args["due_date"] as? String).flatMap { ISO8601DateFormatter().date(from: $0) }
+      let saved = await NoteService.saveNote(title: title, body: body)
+
+      if let date = dueDate {
+        await NoteService.createReminder(title: title, dueDate: date)
+        let f = DateFormatter()
+        f.dateStyle = .medium
+        f.timeStyle = .short
+        return .success("Got it. Saved '\(title)' and set a reminder for \(f.string(from: date)).")
+      }
+      return saved ? .success("Saved: '\(title)'") : .failure("Could not save the note.")
 
     default:
       return .failure("Unknown local tool: \(call.name)")
