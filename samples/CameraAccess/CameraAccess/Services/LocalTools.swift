@@ -20,6 +20,7 @@ enum LocalTools {
     "set_location_trigger",
     "save_parking_spot",
     "remember_this",
+    "create_calendar_event",
   ]
 
   static func isLocal(_ name: String) -> Bool { names.contains(name) }
@@ -95,6 +96,19 @@ enum LocalTools {
         return .success("Got it. Saved '\(title)' and set a reminder for \(f.string(from: date)).")
       }
       return saved ? .success("Saved: '\(title)'") : .failure("Could not save the note.")
+
+    // MARK: Feature G — Sticky Note → Calendar Reminder
+    case "create_calendar_event":
+      guard
+        let title = args["title"] as? String,
+        let startTime = args["start_time"] as? String,
+        let endTime = args["end_time"] as? String
+      else { return .failure("Missing event details.") }
+      let notes = args["notes"] as? String ?? ""
+      let ok = await CalendarWriteService.createEvent(
+        title: title, startTime: startTime, endTime: endTime, notes: notes
+      )
+      return ok ? .success("Added '\(title)' to your calendar.") : .failure("Could not create the event.")
 
     default:
       return .failure("Unknown local tool: \(call.name)")

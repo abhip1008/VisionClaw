@@ -98,6 +98,7 @@ enum ToolDeclarations {
     setLocationTrigger,
     saveParkingSpot,
     rememberThis,
+    createCalendarEvent,
   ]
 
   // MARK: Feature B — Voice Email Triage & Reply
@@ -192,6 +193,23 @@ enum ToolDeclarations {
         "due_date": ["type": "string", "description": "Optional: ISO 8601 date string if the user wants a reminder"]
       ],
       "required": ["title", "body"]
+    ] as [String: Any]
+  ]
+
+  // MARK: Feature G — Sticky Note → Calendar Reminder
+
+  static let createCalendarEvent: [String: Any] = [
+    "name": "create_calendar_event",
+    "description": "Creates an event in Google Calendar. Use when the user says 'remind me to', 'add to calendar', 'don't forget to', or mentions a specific date/time for something.",
+    "parameters": [
+      "type": "object",
+      "properties": [
+        "title": ["type": "string", "description": "Event title"],
+        "start_time": ["type": "string", "description": "Start time in ISO 8601 format"],
+        "end_time": ["type": "string", "description": "End time in ISO 8601 format — default to 30 minutes after start"],
+        "notes": ["type": "string", "description": "Optional notes or description for the event"]
+      ],
+      "required": ["title", "start_time", "end_time"]
     ] as [String: Any]
   ]
 
