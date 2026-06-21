@@ -37,8 +37,14 @@ class ToolCallRouter {
     }
 
     let task = Task { @MainActor in
-      let taskDesc = call.args["task"] as? String ?? String(describing: call.args)
-      let result = await bridge.delegateTask(task: taskDesc, toolName: callName)
+      // Dad-build features: handle known tools on-device; otherwise forward to OpenClaw.
+      let result: ToolResult
+      if LocalTools.isLocal(callName) {
+        result = await LocalTools.handle(call, bridge: self.bridge)
+      } else {
+        let taskDesc = call.args["task"] as? String ?? String(describing: call.args)
+        result = await bridge.delegateTask(task: taskDesc, toolName: callName)
+      }
 
       guard !Task.isCancelled else {
         NSLog("[ToolCall] Task %@ was cancelled, skipping response", callId)

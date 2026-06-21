@@ -85,8 +85,41 @@ enum ToolCallStatus: Equatable {
 enum ToolDeclarations {
 
   static func allDeclarations() -> [[String: Any]] {
-    return [execute]
+    return [execute] + dadBuildTools
   }
+
+  // Dedicated on-device tools added by the Dad-build guide (Features A–K).
+  // Grows as features are implemented; handled in Services/LocalTools.swift.
+  static let dadBuildTools: [[String: Any]] = [
+    readEmails,
+    sendEmail,
+  ]
+
+  // MARK: Feature B — Voice Email Triage & Reply
+
+  static let readEmails: [String: Any] = [
+    "name": "read_emails",
+    "description": "Reads the user's unread emails aloud. Call when the user asks to check, read, or hear their emails.",
+    "parameters": [
+      "type": "object",
+      "properties": [String: Any](),
+      "required": [String]()
+    ] as [String: Any]
+  ]
+
+  static let sendEmail: [String: Any] = [
+    "name": "send_email",
+    "description": "Sends an email. Call this when the user wants to reply to someone or send a message via email. Confirm recipient and content before sending unless clearly urgent.",
+    "parameters": [
+      "type": "object",
+      "properties": [
+        "to": ["type": "string", "description": "Recipient email address"],
+        "subject": ["type": "string", "description": "Email subject line"],
+        "body": ["type": "string", "description": "The full email body text"]
+      ],
+      "required": ["to", "subject", "body"]
+    ] as [String: Any]
+  ]
 
   static let execute: [String: Any] = [
     "name": "execute",
