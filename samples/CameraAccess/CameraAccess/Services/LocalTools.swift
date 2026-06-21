@@ -24,6 +24,8 @@ enum LocalTools {
     "create_calendar_event",
     "get_daily_summary",
     "set_focus_mode",
+    "set_checkin_timer",
+    "cancel_checkin",
   ]
 
   static func isLocal(_ name: String) -> Bool { names.contains(name) }
@@ -139,6 +141,29 @@ enum LocalTools {
         UIApplication.shared.open(url)
       }
       return .success("Focus mode turned \(enabled ? "on" : "off").")
+
+    // MARK: Feature J — Check-In Safety Timer
+    case "set_checkin_timer":
+      guard
+        let contact = args["contact"] as? String,
+        let dueDateStr = args["due_time"] as? String,
+        let dueDate = ISO8601DateFormatter().date(from: dueDateStr)
+      else { return .failure("I need a contact and a time for the check-in.") }
+
+      let location = await LocationService.shared.getCurrentLocation()
+      let locationStr = location.map { "\($0.coordinate.latitude),\($0.coordinate.longitude)" } ?? ""
+      CheckInService.setCheckIn(contact: contact, dueTime: dueDate, location: locationStr)
+
+      let f = DateFormatter()
+      f.timeStyle = .short
+      return .success("Check-in set for \(f.string(from: dueDate)). If you haven't checked back in by then, I'll text \(contact) with your location.")
+
+    case "cancel_checkin":
+      if CheckInService.isActive {
+        CheckInService.cancelCheckIn()
+        return .success("Check-in cancelled. Glad you're back safe.")
+      }
+      return .success("No active check-in timer to cancel.")
 
     default:
       return .failure("Unknown local tool: \(call.name)")

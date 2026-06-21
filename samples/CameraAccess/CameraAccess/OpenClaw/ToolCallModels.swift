@@ -101,6 +101,8 @@ enum ToolDeclarations {
     createCalendarEvent,
     getDailySummary,
     setFocusMode,
+    setCheckinTimer,
+    cancelCheckin,
   ]
 
   // MARK: Feature B — Voice Email Triage & Reply
@@ -238,6 +240,32 @@ enum ToolDeclarations {
         "enabled": ["type": "boolean", "description": "true to enable Focus/DND, false to disable it"]
       ],
       "required": ["enabled"]
+    ] as [String: Any]
+  ]
+
+  // MARK: Feature J — Check-In Safety Timer
+
+  static let setCheckinTimer: [String: Any] = [
+    "name": "set_checkin_timer",
+    "description": "Sets a safety check-in timer. If the user doesn't cancel it by the due time, a message with their location is sent to a contact.",
+    "parameters": [
+      "type": "object",
+      "properties": [
+        "contact": ["type": "string", "description": "Person to alert if the check-in is missed"],
+        "due_time": ["type": "string", "description": "ISO 8601 time when the check-in is due"],
+        "activity": ["type": "string", "description": "What the user is doing (for context in the message)"]
+      ],
+      "required": ["contact", "due_time"]
+    ] as [String: Any]
+  ]
+
+  static let cancelCheckin: [String: Any] = [
+    "name": "cancel_checkin",
+    "description": "Cancels the active safety check-in timer. Call when the user says 'I'm back', 'I'm home', 'cancel check-in', etc.",
+    "parameters": [
+      "type": "object",
+      "properties": [String: Any](),
+      "required": [String]()
     ] as [String: Any]
   ]
 

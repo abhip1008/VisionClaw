@@ -176,6 +176,11 @@ class GeminiSessionViewModel: ObservableObject {
       eventClient.connect()
     }
 
+    // Feature J — let the check-in service send alerts through the OpenClaw agent.
+    CheckInService.messageSender = { [weak self] task in
+      await self?.sendAgentTask(task)
+    }
+
     // Feature D — geofence exits: text the contact via the OpenClaw agent.
     LocationService.shared.onGeofenceExit = { [weak self] contact, message in
       Task { @MainActor in
@@ -238,6 +243,11 @@ class GeminiSessionViewModel: ObservableObject {
     userTranscript = ""
     aiTranscript = ""
     toolCallStatus = .idle
+  }
+
+  // Routes a free-form task (e.g. an iMessage) through the OpenClaw agent.
+  func sendAgentTask(_ task: String) async {
+    _ = await openClawBridge.delegateTask(task: task, toolName: "execute")
   }
 
   func sendVideoFrameIfThrottled(image: UIImage) {
