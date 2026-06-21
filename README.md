@@ -21,6 +21,34 @@ Put on your glasses, tap the AI button, and talk:
 
 The glasses camera streams at ~1fps to Gemini for visual context, while audio flows bidirectionally in real-time.
 
+## Dad Build — Added Features (A–K)
+
+This fork extends the base app with a suite of everyday-automation features. Each
+is a dedicated on-device tool (declared in `OpenClaw/ToolCallModels.swift`, routed
+in `Services/LocalTools.swift`) the assistant calls by voice. Setup steps are in
+[`DAD_MANUAL_STEPS.md`](DAD_MANUAL_STEPS.md); a print-and-share user guide is in
+[`DAD_README.md`](DAD_README.md); design notes are in
+[`DAD_BUILD_PROGRESS.md`](DAD_BUILD_PROGRESS.md).
+
+| Feature | Say this | What happens |
+|---|---|---|
+| **A — Morning Briefing** | *(automatic on session start)* | Reads today's Google Calendar + urgent unread emails aloud |
+| **B — Email Triage & Reply** | "Check my emails" / "Reply and say I'll call tomorrow" | Reads unread Gmail aloud; sends a reply after confirming (`read_emails`, `send_email`) |
+| **C — Pre-Meeting Prep** | *(automatic, ~5 min before a meeting)* | Speaks a prep summary: title, attendees, notes |
+| **D — Auto Messages & ETA** | "I'm heading home" / "Tell my wife I'm done" / "Text my son when I leave here" | Driving ETA text, quick iMessage, or geofence-triggered message (`send_eta_text`, `send_imessage`, `set_location_trigger`) |
+| **E — Parking Spot Logger** | "Remember where I parked" | Saves GPS + address + Apple Maps link + photo, texts it to you (`save_parking_spot`) |
+| **F — Remember This** | "Remember this — buy this for the garage" / "Remember to call the plumber Thursday 10am" | Saves a note; optional reminder in Apple Reminders (`remember_this`) |
+| **G — Spoken → Calendar** | "Remind me to call the accountant Friday at 2pm" | Creates a Google Calendar event with a 10-min reminder (`create_calendar_event`) |
+| **H — Daily Readback** | "What's on my plate today?" | Reads back today's schedule + captured notes (`get_daily_summary`) |
+| **I — Focus Mode** | "I'm in a meeting" / "I'm done" | Toggles Do Not Disturb via iOS Shortcuts (`set_focus_mode`) |
+| **J — Check-In Timer** | "Going for a walk, check in at 7pm" / "I'm back" | Texts family your location if you don't cancel by the due time (`set_checkin_timer`, `cancel_checkin`) |
+| **K — End-of-Day Wrap** | "I'm done for the day, text my wife" | Texts family, clears Focus, reads a day summary (`end_of_day`) |
+
+> Features A, C, G, H and the briefing require connecting Google under
+> **Settings ▸ Google Account**. The messaging features (D, E, J, K) route through
+> OpenClaw. Email/calendar code is guarded with `#if canImport(GoogleSignIn)`, so
+> the app builds before the Google Sign-In package is added.
+
 ## How It Works
 
 ![How It Works](assets/how.png)
