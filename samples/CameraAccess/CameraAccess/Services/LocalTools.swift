@@ -26,6 +26,7 @@ enum LocalTools {
     "set_focus_mode",
     "set_checkin_timer",
     "cancel_checkin",
+    "end_of_day",
   ]
 
   static func isLocal(_ name: String) -> Bool { names.contains(name) }
@@ -164,6 +165,35 @@ enum LocalTools {
         return .success("Check-in cancelled. Glad you're back safe.")
       }
       return .success("No active check-in timer to cancel.")
+
+    // MARK: Feature K — End-of-Day Wrap
+    case "end_of_day":
+      guard let contact = args["family_contact"] as? String else {
+        return .failure("Who should I text?")
+      }
+      let customMessage = args["message"] as? String
+      let notes = NoteService.getTodaysNotes()
+      let calendar = await GoogleCalendarService.fetchTodayEvents()
+      let familyMessage = customMessage ?? "Work's done for the day! 🏠"
+
+      _ = await sendViaAgent("Send iMessage to \(contact) saying: \(familyMessage)", bridge: bridge)
+
+      // Turn off Focus mode if it was on.
+      if let url = URL(string: "shortcuts://run-shortcut?name=FocusOff") {
+        UIApplication.shared.open(url)
+      }
+
+      return .success("""
+      End of day triggered. Texted \(contact).
+      Here's a quick summary of your day:
+
+      \(calendar)
+
+      Notes captured:
+      \(notes)
+
+      Have a good evening.
+      """)
 
     default:
       return .failure("Unknown local tool: \(call.name)")

@@ -103,6 +103,7 @@ enum ToolDeclarations {
     setFocusMode,
     setCheckinTimer,
     cancelCheckin,
+    endOfDay,
   ]
 
   // MARK: Feature B — Voice Email Triage & Reply
@@ -266,6 +267,21 @@ enum ToolDeclarations {
       "type": "object",
       "properties": [String: Any](),
       "required": [String]()
+    ] as [String: Any]
+  ]
+
+  // MARK: Feature K — End-of-Day Wrap
+
+  static let endOfDay: [String: Any] = [
+    "name": "end_of_day",
+    "description": "Triggers the end-of-day wrap: summarizes the day, texts family, and clears Focus mode. Call when the user says they are done for the day, logging off, or wrapping up.",
+    "parameters": [
+      "type": "object",
+      "properties": [
+        "family_contact": ["type": "string", "description": "Who to text with the end-of-day message"],
+        "message": ["type": "string", "description": "Optional custom message to family. Defaults to a simple 'work is done' note."]
+      ],
+      "required": ["family_contact"]
     ] as [String: Any]
   ]
 
